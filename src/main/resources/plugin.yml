@@ -21,3 +21,6 @@ permissions:
   mcds.account.help:
     description: Allows /account help
     default: op
+  mcds.account.register:
+    description: Allows /account register
+    default: op
