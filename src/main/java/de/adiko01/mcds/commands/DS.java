@@ -58,7 +58,7 @@ public class DS implements CommandExecutor, TabCompleter {
             }
 
             commandSender.sendMessage(
-                    ChatColor.YELLOW +"-------------- Help: /ds ----------------------------" + "\n"
+                    ChatColor.YELLOW +"-------------- Help: /ds ----------------------------" + ChatColor.RESET + "\n"
                             + ChatColor.GOLD + "Description:" + ChatColor.RESET + " Below is a list of all /ds commands:" + "\n"
                             + ChatColor.GOLD + "/ds about :" + ChatColor.RESET + " Displays information about the plugin." + "\n"
                             + ChatColor.GOLD + "/ds help :" + ChatColor.RESET + " Displays this page." + "\n"
