@@ -1,0 +1,8 @@
+name: MC-DS
+version: '${project.version}'
+main: de.adiko01.mcds.MC_DS
+api-version: '1.20'
+prefix: MC-DS
+load: STARTUP
+authors: [adiko01 & Lipzh75]
+website: https://github.com
