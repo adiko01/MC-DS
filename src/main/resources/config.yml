@@ -25,7 +25,7 @@ storage: mariadb
 # Konfiguration for using mariaDB or MySQL
 
 mariadb:
-  host: 127.0.0.1
+  host: "127.0.0.1"
   port: 3306
   database: mcds
   user: mcds
