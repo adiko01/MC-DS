@@ -4,7 +4,7 @@ Dieses Plugin stellt einen Verzeichnisdienst für Minecraft.
 
 ## Planung
 
-- [ ] Erstelle Config
+- [X] Erstelle Config
 - [ ] Erstelle anbindung an MariaDB
 - [ ] Plane Tabellenlayout
 - [ ] Erstelle (wenn nicht vorhanden) Tabelle in der DB
@@ -13,8 +13,8 @@ Dieses Plugin stellt einen Verzeichnisdienst für Minecraft.
 - [ ] Erstelle zusätzliches Repo mit einer beispielhaften Web GUI
 
 ## Config
-- [ ] DB Typ --> erstmal nur `mariadb`
-- [ ] Verbindung `mariadb`
+- [X] DB Typ --> erstmal nur `mariadb`
+- [X] Verbindung `mariadb`
   - `host`
   - `port`
   - `datenbank`
