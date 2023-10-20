@@ -1,5 +1,6 @@
 package de.adiko01.mcds;
 
+import de.adiko01.mcds.commands.DS;
 import de.adiko01.mcds.storage.MariaDB;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -30,15 +31,17 @@ public final class MC_DS extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        PluginDescriptionFile pdf = this.getDescription();
+        pdf = this.getDescription();
+
         if (!handleConfig()) {
             //Laden der Config fehlgeschlagen, stoppe Plugin
             getServer().getPluginManager().disablePlugin(this);
         } else {
+            //Laden der Config erfolgreich!
+            initCommands();
 
 
-
-            getLogger().info("MC-DS " + pdf.getVersion() + " is enabled.");
+            getLogger().info("MC-DS " + getVersion() + " is enabled.");
         }
     }
 
@@ -103,5 +106,21 @@ public final class MC_DS extends JavaPlugin {
         getLogger().warning("Die Konfiguration ist fehlerhaft! - " +
                 "Unbekannter Fehler!");
         return false;
+    }
+
+    /**
+     * Melde die Befehle in Spigot an
+     * @since 1.0
+     */
+    private void initCommands() {
+        getCommand("ds").setExecutor(new DS());
+    }
+
+    /**
+     * @return Die Version des Plugins
+     * @since 1.0
+     */
+    public String getVersion() {
+        return pdf.getVersion();
     }
 }
