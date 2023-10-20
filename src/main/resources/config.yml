@@ -1,0 +1,33 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#                                                           #
+#                                                           #
+#                Minecraft Directory Service                #
+#                            MC-DS                          #
+#                    by adiko01 & Lipzh75                   #
+#                                                           #
+#                    This Project is on:                    #
+#             https://github.com/adiko01/MC-DS              #
+#   https://dev.bukkit.org/projects/XXX    #
+#                                                           #
+#                                                           #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# Important Links
+# Wiki:            https://github.com/adiko01/MC-DS/wiki
+# Bugtracker:      https://github.com/adiko01/MC-DS/issues
+
+Version: 1
+
+# Available storage services
+# mariadb, mysql ==> configure section mariadb
+storage: mariadb
+
+# Konfiguration for using mariaDB or MySQL
+
+mariadb:
+  host: 127.0.0.1
+  port: 3306
+  database: mcds
+  user: mcds
+  password: "mcds"
+  prefix: "mcds_"
