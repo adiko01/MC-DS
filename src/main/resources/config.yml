@@ -22,8 +22,7 @@ Version: 1
 # mariadb, mysql ==> configure section mariadb
 storage: mariadb
 
-# Konfiguration for using mariaDB or MySQL
-
+# Configuration for using mariaDB or MySQL
 mariadb:
   host: "127.0.0.1"
   port: 3306
