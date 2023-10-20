@@ -1,5 +1,6 @@
 package de.adiko01.mcds;
 
+import de.adiko01.mcds.commands.Account;
 import de.adiko01.mcds.commands.DS;
 import de.adiko01.mcds.storage.MariaDB;
 import org.bukkit.Bukkit;
@@ -114,6 +115,7 @@ public final class MC_DS extends JavaPlugin {
      */
     private void initCommands() {
         getCommand("ds").setExecutor(new DS());
+        getCommand("account").setExecutor(new Account());
     }
 
     /**

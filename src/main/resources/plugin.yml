@@ -8,11 +8,16 @@ authors: [adiko01 & Lipzh75]
 website: https://github.com/adiko01/MC-DS
 commands:
   ds:
-    description: Commands for this plugin.
+    description: Admin command for this plugin.
+  account:
+    description: Player command for this plugin.
 permissions:
   mcds.about:
     description: Allows /ds about
     default: op
   mcds.help:
     description: Allows /ds help
+    default: op
+  mcds.account.help:
+    description: Allows /account help
     default: op
