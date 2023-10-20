@@ -5,41 +5,12 @@ Dieses Plugin stellt einen Verzeichnisdienst für Minecraft.
 ## Planung
 
 - [X] Erstelle Config
-- [ ] Erstelle anbindung an MariaDB
-- [ ] Plane Tabellenlayout
-- [ ] Erstelle (wenn nicht vorhanden) Tabelle in der DB
+- [X] Erstelle anbindung an MariaDB
+- [X] Plane Tabellenlayout
+- [X] Erstelle (wenn nicht vorhanden) Tabelle in der DB
 - [ ] Erstelle Registrierung
 - [ ] Erstelle Passwort ändern
 - [ ] Erstelle zusätzliches Repo mit einer beispielhaften Web GUI
-
-## Config
-- [X] DB Typ --> erstmal nur `mariadb`
-- [X] Verbindung `mariadb`
-  - `host`
-  - `port`
-  - `datenbank`
-  - `User`
-  - `Password`
-  - `Prefix`
-
-## DB Layout
-### Tabelle: User
-| Spalte             | Datentyp  | Besonderes                            | Bemerkung               |
-|--------------------|-----------|---------------------------------------|-------------------------|
-| UUID               | TINYTEXT  | PRIMARY KEY (36)                      | Die UUID mit -          |
-| Username           | TINYTEXT  |                                       |                         |
-| RegisterDate       | TIMESTAMP | Beim erstellen CURRENT_TIMESTAMP()    |                         |
-| LastPWChangeTime   | TIMESTAMP |                                       |                         |
-| LastPWChangeMethod | INT       | Fremd Key auf ID der Tabelle Services |                         |
-| PasswortSHA256     | TEXT      |                                       | Das Passwort als SHA256 |
-
-### Tabelle: Services
-| Spalte  | Datentyp  | Besonderes                         | Bemerkung                     |
-|---------|-----------|------------------------------------|-------------------------------|
-| ID      | INT       | PRIMARY KEY                        |                               |
-| Name    | Text      | NOT NULL                           | Der Name des Dienstes         |
-| URL     | Text      |                                    | Die URL zum Dienst (optional) |
-| Created | TIMESTAMP | Beim erstellen CURRENT_TIMESTAMP() |                               |
 
 ## Registrierung
 - [ ] `/register [Passwort]`
