@@ -115,7 +115,7 @@ public final class MC_DS extends JavaPlugin {
      */
     private void initCommands() {
         getCommand("ds").setExecutor(new DS());
-        getCommand("account").setExecutor(new Account());
+        getCommand("account").setExecutor(new Account(store));
     }
 
     /**

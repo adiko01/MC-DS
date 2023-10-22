@@ -1,5 +1,7 @@
 package de.adiko01.mcds.commands;
 
+import de.adiko01.mcds.storage.Storage;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,12 +12,25 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+import static de.adiko01.mcds.storage.PasswortTools.checkWeakPassword;
+
 /**
  * Klasse des Befehls /account
  * @author adiko01
  * @version 1.0
  */
 public class Account implements CommandExecutor, TabCompleter {
+    /** Die Speicherengin */
+    private Storage store;
+
+    /**
+     * Der Konstrucktor
+     * @param store Die Speicherengin - {@link Storage}
+     */
+    public Account(Storage store) {
+        this.store = store;
+    }
+
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         //Prüfe, ob ein Spieler handelt
@@ -34,8 +49,32 @@ public class Account implements CommandExecutor, TabCompleter {
                     getPermError(commandSender, "mcds.account.register");
                     return false;
                 }
-                //TODO REGISTRIERE und prüfe Passwort
-                return true;
+
+                if (args.length != 2) {
+                    p.sendMessage("Du musst dein Passwort eingeben!\n" +
+                            "/account register your-password\n" +
+                            "And don't uses spaces in your password!");
+                    return false;
+                }
+
+                String pw = args[1];
+                if (checkWeakPassword(pw)) {
+                    p.sendMessage("Dein Passwort steht auf der Liste der unsicheren Passwörter!n" +
+                            "Bitte wähle ein anderes!");
+                        Bukkit.getLogger().warning("Die Registrierung von " + p.getName() + " ist fehlgeschlagen. - GRUND: Passwort steht auf der Blacklist.");
+                    return false;
+                }
+
+                if (store.registerPlayer(p, pw)) {
+                    Bukkit.getLogger().info(p.getName() + " hat sich erfolgreich registriert.");
+                    p.sendMessage("Dein Account wurde erfolgreich angelegt!");
+                    return true;
+                } else {
+                    p.sendMessage("Es ist ein Fehler aufgetreten, bitte versuche es später erneut.");
+                    Bukkit.getLogger().warning("Die Registrierung von " + p.getName() + " ist fehlgeschlagen. - GRUND: Unbekannt");
+                    return false;
+                }
+
             }
         } else {
             //Zeige Fehler, dass ein Spieler den Befehl ausführen muss
@@ -47,6 +86,11 @@ public class Account implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
+        if (args[0].equalsIgnoreCase("register")) {
+            //Wenn Register der Command ist, dann soll kein Complete vorgeschlagen werden
+            return new ArrayList<>();
+        }
+
         //Liste aller Argumente des Commmand
         String[][] Commands = {
                 //command snippet , permission
