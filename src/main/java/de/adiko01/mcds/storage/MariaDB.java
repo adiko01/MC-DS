@@ -1,9 +1,14 @@
 package de.adiko01.mcds.storage;
 
+import org.bukkit.entity.Player;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import static de.adiko01.mcds.storage.PasswortTools.getSHA256;
+import static org.bukkit.Bukkit.getLogger;
 
 /**Das Objekt f&uuml;r eine MariaDB verbindung
  * @author adiko01
@@ -120,6 +125,36 @@ public class MariaDB extends Storage{
         } catch (ClassNotFoundException | SQLException e) {
             return false;
         }
+    }
+
+    /**
+     * Regestriere einen Spieler in der DB
+     * @param p The {@link Player}
+     * @param Password The Password
+     * @return Erfolg
+     * @since 1.0
+     */
+    @Override
+    public boolean registerPlayer(Player p, String Password) {
+        if(conn == null) {
+            getLogger().warning("Keine Verbindung zur Datenbank");
+            return false;
+        }
+
+        if (getSHA256(Password).isEmpty()) {
+            getLogger().warning("Passwort konnte nicht gehasht werden");
+            return false;
+        }
+
+        String SQL = "INSERT INTO `" + Database + "`.`" + Prefix + "Users`" +
+                " (`UUID`, `Username`, `PwChangeService`, `PasswortSHA256`)" +
+                " VALUES ('" + p.getUniqueId() + "', '" + p.getName() + "', 1, '" + getSHA256(Password) + "');";
+
+        if (sendData(SQL)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
