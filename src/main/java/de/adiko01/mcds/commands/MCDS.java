@@ -1,7 +1,5 @@
 package de.adiko01.mcds.commands;
 
-import de.adiko01.mcds.MC_DS;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,17 +11,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Klasse des Befehls /ds
+ * Klasse des Befehls /mcds
  * @author adiko01
  * @version 1.0
  */
-public class DS implements CommandExecutor, TabCompleter {
+public class MCDS implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         boolean showHELP = false;
 
         if (args.length >= 1) {
-            if (args[0].equalsIgnoreCase("help")) {
+            if (args[0].equalsIgnoreCase("about")) {
+                if (commandSender instanceof Player) {
+                    Player p = (Player) commandSender;
+                    if (!p.hasPermission("mcds.about")) {
+                        getPermError(commandSender, "mcds.about");
+                        return false;
+                    }
+                }
+                commandSender.sendMessage("Minecraft Directory Service\n"
+                        + "GitHub: " + ChatColor.RED + ChatColor.UNDERLINE + "https://github.com/adiko01/MC-DS" + ChatColor.RESET + "\n"
+                        + "Wiki: " + ChatColor.RED + ChatColor.UNDERLINE + "https://github.com/adiko01/MC-DS/wiki" + ChatColor.RESET + "\n"
+                        + "Bugtracker: " + ChatColor.RED + ChatColor.UNDERLINE + "https://github.com/adiko01/MC-DS/issues" + ChatColor.RESET + "\n"
+                        + "Bukkit: " + ChatColor.RED + ChatColor.UNDERLINE + "" + ChatColor.RESET + "\n" //TODO LINK
+                );
+                return false;
+            } else if (args[0].equalsIgnoreCase("help")) {
                 showHELP = true;
             } else {
                 showHELP = true;
@@ -36,16 +49,17 @@ public class DS implements CommandExecutor, TabCompleter {
             //Prüfe, ob der Spieler atp.help besitzt
             if (commandSender instanceof Player) {
                 Player p = (Player) commandSender;
-                if (!p.hasPermission("mcds.ds.help")) {
-                    getPermError(commandSender, "mcds.ds.help");
+                if (!p.hasPermission("mcds.help")) {
+                    getPermError(commandSender, "mcds.help");
                     return false;
                 }
             }
 
             commandSender.sendMessage(
-                    ChatColor.YELLOW +"-------------- Help: /ds ----------------------------" + ChatColor.RESET + "\n"
-                            + ChatColor.GOLD + "Description:" + ChatColor.RESET + " Below is a list of all /ds commands:" + "\n"
-                            + ChatColor.GOLD + "/ds help :" + ChatColor.RESET + " Displays this page." + "\n"
+                    ChatColor.YELLOW +"-------------- Help: /mcds ----------------------------" + ChatColor.RESET + "\n"
+                            + ChatColor.GOLD + "Description:" + ChatColor.RESET + " Below is a list of all /mcds commands:" + "\n"
+                            + ChatColor.GOLD + "/mcds about :" + ChatColor.RESET + " Displays information about the plugin." + "\n"
+                            + ChatColor.GOLD + "/mcds help :" + ChatColor.RESET + " Displays this page." + "\n"
             );
             return false;
         }
@@ -58,7 +72,8 @@ public class DS implements CommandExecutor, TabCompleter {
         //Liste aller Argumente des Commmand
         String[][] Commands = {
                 //command snippet , permission
-                {"help" , "mcds.ds.help"}
+                {"about" , "mcds.about"},
+                {"help" , "mcds.help"}
         };
 
         //Liste, welche zurückgegeben werden soll

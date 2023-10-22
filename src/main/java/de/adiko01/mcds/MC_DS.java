@@ -2,6 +2,7 @@ package de.adiko01.mcds;
 
 import de.adiko01.mcds.commands.Account;
 import de.adiko01.mcds.commands.DS;
+import de.adiko01.mcds.commands.MCDS;
 import de.adiko01.mcds.storage.MariaDB;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -115,6 +116,7 @@ public final class MC_DS extends JavaPlugin {
      */
     private void initCommands() {
         getCommand("ds").setExecutor(new DS());
+        getCommand("mcds").setExecutor(new MCDS());
         getCommand("account").setExecutor(new Account(store));
     }
 
