@@ -13,14 +13,14 @@ Dieses Plugin stellt einen Verzeichnisdienst für Minecraft.
 - [ ] Erstelle zusätzliches Repo mit einer beispielhaften Web GUI
 
 ## Registrierung
-- [ ] `/register [Passwort]`
-  - `mcds.own.register`
+- [X] `/account register [Passwort]`
+  - `mcds.account.register`
 - [ ] `/ds register [User] [Passwort]`
-  - `mcds.other.register`
+  - `mcds.ds.register`
 - [ ] `/password [neues Passwort]`
-  - `mcds.own.changepassword`
+  - `mcds.account.changepassword`
 - [ ] `/ds block [User]`
-  - `mcds.admin.blockuser`
+  - `mcds.ds.blockuser`
   - `mcds.exception.bocking` --> Ausnahme: Kann nicht blockiert werden
 
 ## Verbindung zu anderen Plugins
