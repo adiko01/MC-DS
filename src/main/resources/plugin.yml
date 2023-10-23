@@ -29,3 +29,6 @@ permissions:
   mcds.account.register:
     description: Allows /account register
     default: op
+  mcds.account.changepw:
+    description: Allows /account changepw
+    default: op

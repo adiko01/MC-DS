@@ -1,5 +1,6 @@
 package de.adiko01.mcds.storage;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.sql.Connection;
@@ -150,6 +151,37 @@ public class MariaDB extends Storage{
                 " (`UUID`, `Username`, `PwChangeService`, `PasswortSHA256`)" +
                 " VALUES ('" + p.getUniqueId() + "', '" + p.getName() + "', 1, '" + getSHA256(Password) + "');";
 
+        if (sendData(SQL)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Ändere das Passwort eines Spielers in der DB
+     * @param p The {@link Player}
+     * @param Password The Password
+     * @return Erfolg
+     * @since 1.0
+     */
+    @Override
+    public boolean changePawword(Player p, String Password) {
+        if(conn == null) {
+            getLogger().warning("Keine Verbindung zur Datenbank");
+            return false;
+        }
+
+        if (getSHA256(Password).isEmpty()) {
+            getLogger().warning("Passwort konnte nicht gehasht werden");
+            return false;
+        }
+
+        String SQL = "UPDATE `" + Database + "`.`" + Prefix + "Users`" +
+                " SET `PasswortSHA256`='" + getSHA256(Password)
+                + "', `PwChangeService`=1 " +
+                " WHERE  `UUID`='" + p.getUniqueId() + "';";
+        Bukkit.getLogger().info(SQL);
         if (sendData(SQL)) {
             return true;
         }

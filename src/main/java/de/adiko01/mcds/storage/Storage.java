@@ -26,4 +26,13 @@ abstract public class Storage {
      * @since 1.0
      */
     abstract public boolean registerPlayer(Player p, String Password);
+
+    /**
+     * Ändere das Passwort eines Spielers in der DB
+     * @param p The {@link Player}
+     * @param Password The Password
+     * @return Erfolg
+     * @since 1.0
+     */
+    abstract public boolean changePawword (Player p, String Password);
 }

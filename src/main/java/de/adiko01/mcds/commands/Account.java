@@ -75,6 +75,37 @@ public class Account implements CommandExecutor, TabCompleter {
                     return false;
                 }
 
+            } else if (args[0].equalsIgnoreCase("changepw")) {
+                if (!p.hasPermission("mcds.account.changepw")) {
+                    getPermError(commandSender, "mcds.account.changepw");
+                    return false;
+                }
+
+                if (args.length != 2) {
+                    p.sendMessage("Du musst dein Passwort eingeben!\n" +
+                            "/account changepw your-password\n" +
+                            "And don't uses spaces in your password!");
+                    return false;
+                }
+
+                String pw = args[1];
+                if (checkWeakPassword(pw)) {
+                    p.sendMessage("Dein Passwort steht auf der Liste der unsicheren Passwörter!n" +
+                            "Bitte wähle ein anderes!");
+                    Bukkit.getLogger().warning("Das Ändern des Passwortes von " + p.getName() + " ist fehlgeschlagen. - GRUND: Passwort steht auf der Blacklist.");
+                    return false;
+                }
+
+                if (store.changePawword(p, pw)) {
+                    Bukkit.getLogger().info(p.getName() + " hat erfolgreich sein Passwort geaendert.");
+                    p.sendMessage("Dein Passwort wurde erfolgreich geändert!");
+                    return true;
+                } else {
+                    p.sendMessage("Es ist ein Fehler aufgetreten, bitte versuche es später erneut.");
+                    Bukkit.getLogger().warning("Das Ändern des Passwortes von " + p.getName() + " ist fehlgeschlagen. - GRUND: Unbekannt");
+                    return false;
+                }
+
             }
         } else {
             //Zeige Fehler, dass ein Spieler den Befehl ausführen muss
@@ -86,14 +117,18 @@ public class Account implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
-        if (args[0].equalsIgnoreCase("register")) {
-            //Wenn Register der Command ist, dann soll kein Complete vorgeschlagen werden
+        if (
+                args[0].equalsIgnoreCase("register")
+                || args[0].equalsIgnoreCase("changepw")
+        ) {
+            //Commands ohne Vorschlag
             return new ArrayList<>();
         }
 
         //Liste aller Argumente des Commmand
         String[][] Commands = {
                 //command snippet , permission
+                {"changepw" , "mcds.account.changepw"},
                 {"help" , "mcds.account.help"},
                 {"register" , "mcds.account.register"}
         };
@@ -151,6 +186,7 @@ public class Account implements CommandExecutor, TabCompleter {
         commandSender.sendMessage(
                 ChatColor.YELLOW +"-------------- Help: /account ----------------------------" + ChatColor.RESET + "\n"
                         + ChatColor.GOLD + "Description:" + ChatColor.RESET + " Below is a list of all /ds commands:" + "\n"
+                        + ChatColor.GOLD + "/account changepw [password]:" + ChatColor.RESET + " Change your password" + "\n"
                         + ChatColor.GOLD + "/account help :" + ChatColor.RESET + " Displays this page." + "\n"
                         + ChatColor.GOLD + "/account register [password]:" + ChatColor.RESET + " Register yourself, with the given password" + "\n"
         );
