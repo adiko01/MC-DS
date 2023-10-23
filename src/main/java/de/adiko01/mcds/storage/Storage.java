@@ -37,4 +37,12 @@ abstract public class Storage {
      * @since 1.0
      */
     abstract public boolean changePawword (Player p, String Password, String Comment);
+
+    /**
+     * Ist ein Spieler Registriert
+     * @param p {@link  Player}
+     * @return Ergenbnis
+     * @since 1.0
+     */
+    abstract public boolean isPlayerRegistrated (Player p);
 }

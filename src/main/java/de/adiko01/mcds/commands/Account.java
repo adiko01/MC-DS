@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static de.adiko01.mcds.storage.PasswortTools.checkWeakPassword;
 
@@ -50,6 +51,12 @@ public class Account implements CommandExecutor, TabCompleter {
                     return false;
                 }
 
+                if (store.isPlayerRegistrated(p)) {
+                    p.sendMessage("Du bist bereits Registriert!");
+                    Bukkit.getLogger().warning("Die Registrierung von " + p.getName() + " ist fehlgeschlagen. - GRUND: Es besteht bereits eine Registrierung.");
+                    return false;
+                }
+
                 if (args.length != 2) {
                     p.sendMessage("Du musst dein Passwort eingeben!\n" +
                             "/account register your-password\n" +
@@ -78,6 +85,12 @@ public class Account implements CommandExecutor, TabCompleter {
             } else if (args[0].equalsIgnoreCase("changepw")) {
                 if (!p.hasPermission("mcds.account.changepw")) {
                     getPermError(commandSender, "mcds.account.changepw");
+                    return false;
+                }
+
+                if (!store.isPlayerRegistrated(p)) {
+                    p.sendMessage("Du bist noch nicht Registriert! - Bitte Registriere dich zunächst.");
+                    Bukkit.getLogger().warning("Das Ändern des Passwortes von " + p.getName() + " ist fehlgeschlagen. - GRUND: Es liegt keine Registrierung vor.");
                     return false;
                 }
 
@@ -149,6 +162,15 @@ public class Account implements CommandExecutor, TabCompleter {
             if (MCom[0].startsWith(CurrentCommand)) {
                 if ((p != null) && !p.hasPermission(MCom[1])) {
                     continue;
+                }
+                if (Objects.equals(MCom[0], "register")) {
+                    if (store.isPlayerRegistrated(p)) {
+                        continue;
+                    }
+                } else if (Objects.equals(MCom[0], "change")) {
+                    if (!store.isPlayerRegistrated(p)) {
+                        continue;
+                    }
                 }
                 Ret.add(MCom[0]);
             }

@@ -2,10 +2,7 @@ package de.adiko01.mcds.storage;
 
 import org.bukkit.entity.Player;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import static de.adiko01.mcds.storage.PasswortTools.getSHA256;
 import static org.bukkit.Bukkit.getLogger;
@@ -182,6 +179,39 @@ public class MariaDB extends Storage{
                 + " WHERE  `UUID`='" + p.getUniqueId() + "';";
 
         return sendData(SQL);
+    }
+
+    /**
+     * Ist ein Spieler Registriert
+     * @param p
+     *         {@link  Player}
+     *
+     * @return Ergenbnis
+     * @since 1.0
+     */
+    @Override
+    public boolean isPlayerRegistrated(Player p) {
+        if (conn == null) {
+            getLogger().warning("Keine Verbindung zur Datenbank");
+            return false;
+        }
+
+        try {
+            Statement statement = conn.createStatement();
+            String query = "SELECT `UUID` FROM `" + Prefix + "Users` WHERE `UUID` = '" + p.getUniqueId() + "';";
+            ResultSet resultSet = statement.executeQuery(query);
+
+            // Wenn ein Ergebnis vorhanden ist, dann ist der Spieler registriert
+            boolean isRegistered = resultSet.next();
+
+            resultSet.close();
+            statement.close();
+
+            return isRegistered;
+        } catch (SQLException e) {
+            getLogger().warning("Fehler beim Prüfen der Spielerregistrierung: " + e.getMessage());
+            return false;
+        }
     }
 
     /**
