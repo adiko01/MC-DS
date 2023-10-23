@@ -65,7 +65,7 @@ public class Account implements CommandExecutor, TabCompleter {
                     return false;
                 }
 
-                if (store.registerPlayer(p, pw)) {
+                if (store.registerPlayer(p, pw, "Registrierung")) {
                     Bukkit.getLogger().info(p.getName() + " hat sich erfolgreich registriert.");
                     p.sendMessage("Dein Account wurde erfolgreich angelegt!");
                     return true;
@@ -96,7 +96,7 @@ public class Account implements CommandExecutor, TabCompleter {
                     return false;
                 }
 
-                if (store.changePawword(p, pw)) {
+                if (store.changePawword(p, pw, "Passwortänderrung")) {
                     Bukkit.getLogger().info(p.getName() + " hat erfolgreich sein Passwort geaendert.");
                     p.sendMessage("Dein Passwort wurde erfolgreich geändert!");
                     return true;

@@ -111,6 +111,7 @@ public class MariaDB extends Storage{
                     "  `RegisterTime` timestamp NOT NULL DEFAULT current_timestamp()," +
                     "  `PwChangeTime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()," +
                     "  `PwChangeService` int(11) NOT NULL," +
+                    "  `PwChagneComment` text NOT NULL," +
                     "  `PasswortSHA256` text NOT NULL," +
                     "  PRIMARY KEY (`UUID`(36))," +
                     "  KEY `FK_Users_Services` (`PwChangeService`)," +
@@ -132,11 +133,12 @@ public class MariaDB extends Storage{
      * Regestriere einen Spieler in der DB
      * @param p The {@link Player}
      * @param Password The Password
+     * @param Comment Der Kommantar
      * @return Erfolg
      * @since 1.0
      */
     @Override
-    public boolean registerPlayer(Player p, String Password) {
+    public boolean registerPlayer(Player p, String Password, String Comment) {
         if(conn == null) {
             getLogger().warning("Keine Verbindung zur Datenbank");
             return false;
@@ -148,8 +150,8 @@ public class MariaDB extends Storage{
         }
 
         String SQL = "INSERT INTO `" + Database + "`.`" + Prefix + "Users`" +
-                " (`UUID`, `Username`, `PwChangeService`, `PasswortSHA256`)" +
-                " VALUES ('" + p.getUniqueId() + "', '" + p.getName() + "', 1, '" + getSHA256(Password) + "');";
+                " (`UUID`, `Username`, `PwChangeService`, `PwChagneComment`, `PasswortSHA256`)" +
+                " VALUES ('" + p.getUniqueId() + "', '" + p.getName() + "', '" + Comment + "' , 1, '" + getSHA256(Password) + "');";
 
         if (sendData(SQL)) {
             return true;
@@ -162,11 +164,12 @@ public class MariaDB extends Storage{
      * Ändere das Passwort eines Spielers in der DB
      * @param p The {@link Player}
      * @param Password The Password
+     * @param Comment Der Kommentar
      * @return Erfolg
      * @since 1.0
      */
     @Override
-    public boolean changePawword(Player p, String Password) {
+    public boolean changePawword(Player p, String Password, String Comment) {
         if(conn == null) {
             getLogger().warning("Keine Verbindung zur Datenbank");
             return false;
@@ -177,10 +180,11 @@ public class MariaDB extends Storage{
             return false;
         }
 
-        String SQL = "UPDATE `" + Database + "`.`" + Prefix + "Users`" +
-                " SET `PasswortSHA256`='" + getSHA256(Password)
-                + "', `PwChangeService`=1 " +
-                " WHERE  `UUID`='" + p.getUniqueId() + "';";
+        String SQL = "UPDATE `" + Database + "`.`" + Prefix + "Users`"
+                + " SET `PasswortSHA256`='" + getSHA256(Password) + "'"
+                + ", `PwChangeService`=1 "
+                + ", `PwChagneComment`='" + Comment + "'"
+                + " WHERE  `UUID`='" + p.getUniqueId() + "';";
         Bukkit.getLogger().info(SQL);
         if (sendData(SQL)) {
             return true;
