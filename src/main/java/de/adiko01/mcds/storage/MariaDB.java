@@ -1,6 +1,5 @@
 package de.adiko01.mcds.storage;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.sql.Connection;
@@ -153,11 +152,7 @@ public class MariaDB extends Storage{
                 " (`UUID`, `Username`, `PwChangeService`, `PwChagneComment`, `PasswortSHA256`)" +
                 " VALUES ('" + p.getUniqueId() + "', '" + p.getName() + "', '" + Comment + "' , 1, '" + getSHA256(Password) + "');";
 
-        if (sendData(SQL)) {
-            return true;
-        }
-
-        return false;
+        return sendData(SQL);
     }
 
     /**
@@ -186,11 +181,7 @@ public class MariaDB extends Storage{
                 + ", `PwChagneComment`='" + Comment + "'"
                 + " WHERE  `UUID`='" + p.getUniqueId() + "';";
 
-        if (sendData(SQL)) {
-            return true;
-        }
-
-        return false;
+        return sendData(SQL);
     }
 
     /**
