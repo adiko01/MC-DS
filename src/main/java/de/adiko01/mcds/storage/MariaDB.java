@@ -185,7 +185,7 @@ public class MariaDB extends Storage{
                 + ", `PwChangeService`=1 "
                 + ", `PwChagneComment`='" + Comment + "'"
                 + " WHERE  `UUID`='" + p.getUniqueId() + "';";
-        Bukkit.getLogger().info(SQL);
+
         if (sendData(SQL)) {
             return true;
         }
