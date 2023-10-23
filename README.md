@@ -17,8 +17,8 @@ Dieses Plugin stellt einen Verzeichnisdienst für Minecraft.
   - `mcds.account.register`
 - [ ] `/ds register [User] [Passwort]`
   - `mcds.ds.register`
-- [ ] `/password [neues Passwort]`
-  - `mcds.account.changepassword`
+- [X] `/account changepw [neues Passwort]`
+  - `mcds.account.changepw`
 - [ ] `/ds block [User]`
   - `mcds.ds.blockuser`
   - `mcds.exception.bocking` --> Ausnahme: Kann nicht blockiert werden
