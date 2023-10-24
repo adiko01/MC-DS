@@ -14,15 +14,6 @@ commands:
   mcds:
     description: Admin/Dev command for this plugin.
 permissions:
-  mcds.about:
-    description: Allows /ds about
-    default: op
-  mcds.help:
-    description: Allows /ds about
-    default: op
-  mcds.ds.help:
-    description: Allows /ds help
-    default: op
   mcds.account.help:
     description: Allows /account help
     default: op
@@ -31,4 +22,16 @@ permissions:
     default: op
   mcds.account.changepw:
     description: Allows /account changepw
+    default: op
+  mcds.ds.help:
+    description: Allows /ds help
+    default: op
+  mcds.about:
+    description: Allows /ds about
+    default: op
+  mcds.help:
+    description: Allows /ds about
+    default: op
+  mcds.link:
+    description: Allows /ds link
     default: op

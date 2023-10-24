@@ -1,5 +1,6 @@
 package de.adiko01.mcds.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -7,8 +8,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.bukkit.Bukkit.*;
 
 /**
  * Klasse des Befehls /mcds
@@ -21,7 +30,22 @@ public class MCDS implements CommandExecutor, TabCompleter {
         boolean showHELP = false;
 
         if (args.length >= 1) {
-            if (args[0].equalsIgnoreCase("about")) {
+            if (args[0].equalsIgnoreCase("link")) {
+                //Linker
+                if (commandSender instanceof Player) {
+                    Player p = (Player) commandSender;
+                    if (!p.hasPermission("mcds.link")) {
+                        getPermError(commandSender, "mcds.link");
+                        return false;
+                    }
+                }
+                if (args.length < 2) {
+                    commandSender.sendMessage("Bitte gebe einen Dienst an: /mcds link [service]");
+                    return false;
+                }
+                link(commandSender, args[1]);
+                return true;
+            } else if (args[0].equalsIgnoreCase("about")) {
                 if (commandSender instanceof Player) {
                     Player p = (Player) commandSender;
                     if (!p.hasPermission("mcds.about")) {
@@ -60,6 +84,7 @@ public class MCDS implements CommandExecutor, TabCompleter {
                             + ChatColor.GOLD + "Description:" + ChatColor.RESET + " Below is a list of all /mcds commands:" + "\n"
                             + ChatColor.GOLD + "/mcds about :" + ChatColor.RESET + " Displays information about the plugin." + "\n"
                             + ChatColor.GOLD + "/mcds help :" + ChatColor.RESET + " Displays this page." + "\n"
+                            + ChatColor.GOLD + "/mcds link [service]:" + ChatColor.RESET + " Generates the Config and an Manual to connect an other webservice." + "\n"
             );
             return false;
         }
@@ -69,12 +94,23 @@ public class MCDS implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
-        //Liste aller Argumente des Commmand
-        String[][] Commands = {
-                //command snippet , permission
-                {"about" , "mcds.about"},
-                {"help" , "mcds.help"}
-        };
+        String[][] Commands = {};
+        if (args.length > 1) {
+            if (args[0].equalsIgnoreCase("link")) {
+                Commands = new String[][] {
+                        //command snippet , permission
+                        {"dynmap", "mcds.link"}
+                };
+            }
+        } else {
+            //Liste aller Argumente des Commmand
+            Commands = new String[][] {
+                    //command snippet , permission
+                    {"about" , "mcds.about"},
+                    {"help" , "mcds.help"},
+                    {"link" , "mcds.link"}
+            };
+        }
 
         //Liste, welche zurückgegeben werden soll
         ArrayList<String> Ret = new ArrayList<>();
@@ -108,5 +144,43 @@ public class MCDS implements CommandExecutor, TabCompleter {
      */
     private void getPermError (CommandSender commandSender, String permission) {
         commandSender.sendMessage(ChatColor.RED + "This is not allowed! - You need " + ChatColor.BLUE + permission + ChatColor.RESET);
+    }
+
+    /**
+     * Generiert im Pluginordner die passenden Configurationsdatein für einen Dienst
+     * @param Type
+     */
+    private void link (CommandSender s, String Type) {
+        if (Type.equalsIgnoreCase("dynmap")) {
+            File dataFolder = Bukkit.getPluginManager().getPlugin("MC-DS").getDataFolder();
+            copyResource("dynmap/README.md", dataFolder.toPath());
+            copyResource("dynmap/login.html", dataFolder.toPath());
+            copyResource("dynmap/MCDS_login.php", dataFolder.toPath());
+        } else {
+            s.sendMessage("Der Dienst " + Type + " existiert nicht.");
+            getLogger().warning("Der Dienst " + Type + " existiert nicht.");
+        }
+    }
+
+    /**
+     * Kopiert die Recource in den Pluginordner
+     * @param resourcePath
+     * @param targetPath
+     * @since 1.0
+     */
+    private void copyResource(String resourcePath, Path targetPath) {
+        try {
+            InputStream inputStream = Bukkit.getPluginManager().getPlugin("MC-DS").getResource(resourcePath);
+            if (inputStream != null) {
+                if (!Files.exists(targetPath.resolve(resourcePath))) {
+                    Files.createDirectories(targetPath.resolve(resourcePath).getParent());
+                    Files.copy(inputStream, targetPath.resolve(resourcePath), StandardCopyOption.REPLACE_EXISTING);
+                }
+            } else {
+                getLogger().warning("Resource folder " + resourcePath + " not found.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
