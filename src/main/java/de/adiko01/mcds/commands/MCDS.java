@@ -1,5 +1,7 @@
 package de.adiko01.mcds.commands;
 
+import de.adiko01.mcds.storage.MariaDB;
+import de.adiko01.mcds.storage.Storage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -11,11 +13,11 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.bukkit.Bukkit.*;
 
@@ -25,6 +27,14 @@ import static org.bukkit.Bukkit.*;
  * @version 1.0
  */
 public class MCDS implements CommandExecutor, TabCompleter {
+
+    /** Der Storage **/
+    private Storage store;
+
+    public MCDS(Storage store) {
+        this.store = store;
+    }
+
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         boolean showHELP = false;
@@ -156,6 +166,34 @@ public class MCDS implements CommandExecutor, TabCompleter {
             copyResource("dynmap/README.md", dataFolder.toPath());
             copyResource("dynmap/login.html", dataFolder.toPath());
             copyResource("dynmap/MCDS_login.php", dataFolder.toPath());
+
+            //Setze Default Werte in der MCDS_login.php
+            MariaDB st = (MariaDB) store;
+
+            replaceLine(dataFolder.getPath() + File.separator +"dynmap" + File.separator + "MCDS_login.php",
+                    "\t$DSdbname = '';",
+                    "\t$DSdbname = '" + st.getDatabase() + "';"
+            );
+            replaceLine(dataFolder.getPath() + File.separator +"dynmap" + File.separator +"MCDS_login.php",
+                    "\t$DSdbhost = '';",
+                    "\t$DSdbhost = '" + st.getHost() + "';"
+            );
+            replaceLine(dataFolder.getPath() + File.separator +"dynmap" + File.separator +"MCDS_login.php",
+                    "\t$DSdbport = 3306;",
+                    "\t$DSdbport = " + st.getPort() + ";"
+            );
+            replaceLine(dataFolder.getPath() + File.separator +"dynmap" + File.separator +"MCDS_login.php",
+                    "\t$DSdbuserid = '';",
+                    "\t$DSdbuserid = '" + st.getUsername() + "';"
+            );
+            replaceLine(dataFolder.getPath() + File.separator +"dynmap" + File.separator +"MCDS_login.php",
+                    "\t$DSdbpassword = '';",
+                    "\t$DSdbpassword = '" + st.getPassword() + "';"
+            );
+            replaceLine(dataFolder.getPath() + File.separator +"dynmap" + File.separator +"MCDS_login.php",
+                    "\t$DSdbprefix = '';",
+                    "\t$DSdbprefix = '" + st.getPrefix() + "';"
+            );
         } else {
             s.sendMessage("Der Dienst " + Type + " existiert nicht.");
             getLogger().warning("Der Dienst " + Type + " existiert nicht.");
@@ -179,6 +217,31 @@ public class MCDS implements CommandExecutor, TabCompleter {
             } else {
                 getLogger().warning("Resource folder " + resourcePath + " not found.");
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Ersetzt eine Zeile in der übergebenen Datei
+     * @param filePath Pfad als String
+     * @param oldLine Alte Zeile
+     * @param newLine Neue Zeile
+     * @since 1.0
+     */
+    private void replaceLine (String filePath, String oldLine, String newLine) {
+        try {
+            Path path = Paths.get(filePath);
+            List<String> lines = Files.readAllLines(path);
+
+            for (int i = 0; i < lines.size(); i++) {
+                if (lines.get(i).contains(oldLine)) {
+                    lines.set(i, newLine);
+                }
+            }
+
+            Files.write(path, lines);
+            getLogger().info("Die Zeile wurde erfolgreich ersetzt.");
         } catch (IOException e) {
             e.printStackTrace();
         }
