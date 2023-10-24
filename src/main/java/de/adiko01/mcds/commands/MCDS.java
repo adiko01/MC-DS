@@ -16,8 +16,6 @@ import java.io.InputStream;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.bukkit.Bukkit.*;
 
