@@ -233,4 +233,28 @@ public class MariaDB extends Storage{
             return false;
         }
     }
+
+    public String getDatabase() {
+        return Database;
+    }
+
+    public String getHost() {
+        return Host;
+    }
+
+    public int getPort() {
+        return Port;
+    }
+
+    public String getPassword() {
+        return Password;
+    }
+
+    public String getPrefix() {
+        return Prefix;
+    }
+
+    public String getUsername() {
+        return Username;
+    }
 }
