@@ -239,7 +239,6 @@ public class MCDS implements CommandExecutor, TabCompleter {
             }
 
             Files.write(path, lines);
-            getLogger().info("Die Zeile wurde erfolgreich ersetzt.");
         } catch (IOException e) {
             e.printStackTrace();
         }
