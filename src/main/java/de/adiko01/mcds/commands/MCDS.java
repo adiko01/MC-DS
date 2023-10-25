@@ -192,6 +192,8 @@ public class MCDS implements CommandExecutor, TabCompleter {
                     "\t$DSdbprefix = '';",
                     "\t$DSdbprefix = '" + st.getPrefix() + "';"
             );
+            s.sendMessage("Die Konfigurationsdateien für die dynmap sind erstellt worden.");
+            getLogger().info("Die Konfigurationsdateien für die dynmap sind erstellt worden.");
         } else {
             s.sendMessage("Der Dienst " + Type + " existiert nicht.");
             getLogger().warning("Der Dienst " + Type + " existiert nicht.");
